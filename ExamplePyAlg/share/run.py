@@ -22,9 +22,12 @@ class Edm2NumpyModule(JUNOModule):
         pass
 
     def init(self, toptask, args):
+        # Create a python store
         import SniperPython
         toptask.createSvc("PyDataStoreSvc/DataStore")
 
+        # Create one algorithm in C++ to convert the EDM data to numpy
+        # Create another algorithm in Python to process data
         import ExamplePyAlg
         import ExamplePyAlg.DummyPyAlg
 
@@ -35,7 +38,7 @@ class Edm2NumpyModule(JUNOModule):
 ##############################################################################
 # Application
 ##############################################################################
-juno_application = JUNOApplication(description="Conert SimEvent to numpy")
+juno_application = JUNOApplication(description="Convert SimEvent to numpy")
 juno_application.set_default_input("sample_detsim.root")
 
 databuffer_module = JUNODataBufferModule()
