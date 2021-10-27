@@ -7,6 +7,10 @@
 
 #include "EvtNavigator/NavBuffer.h"
 
+namespace p = boost::python;
+namespace np = boost::python::numpy;
+
+
 DECLARE_ALGORITHM(Edm2NumpyAlg);
 
 Edm2NumpyAlg::Edm2NumpyAlg(const std::string& name)
@@ -24,10 +28,13 @@ bool Edm2NumpyAlg::initialize() {
     }
     m_buf = navBuf.data();
 
+    np::initialize();
+
     return true;
 }
 
 bool Edm2NumpyAlg::execute() {
+    // = prepare =
     auto nav = m_buf->curEvt();
     if (not nav) {
         LogError << "Failed to find the event navigator. " << std::endl;
@@ -47,6 +54,35 @@ bool Edm2NumpyAlg::execute() {
     }
 
     LogInfo << "The SimEvent ID: " << simevt->getEventID() << std::endl;
+
+    // = convert hit to numpy array =
+    auto hit_collection = simevt->getCDHitsVec();
+    auto hit_col_size = hit_collection.size();
+    if (not hit_col_size) {
+        LogInfo << "Skip the event due to empty collection. " << std::endl;
+        return true;
+    }
+
+    p::tuple shape = p::make_tuple(hit_col_size);
+    np::dtype dtype_int = np::dtype::get_builtin<int>();
+    np::dtype dtype_double = np::dtype::get_builtin<double>();
+
+    np::ndarray arr_pmtid = np::zeros(shape, dtype_int);
+    np::ndarray arr_npe = np::zeros(shape, dtype_int);
+    np::ndarray arr_hittime = np::zeros(shape, dtype_double);
+
+    int hit_counter = 0;
+    for (auto hit: hit_collection) {
+        int pmtid = hit->getPMTID();
+        int npe = hit->getNPE();
+        double hittime = hit->getHitTime();
+
+        arr_pmtid[hit_counter] = pmtid;
+        arr_npe[hit_counter] = npe;
+        arr_hittime[hit_counter] = hittime;
+
+        ++hit_counter;
+    }
 
     return true;
 }
