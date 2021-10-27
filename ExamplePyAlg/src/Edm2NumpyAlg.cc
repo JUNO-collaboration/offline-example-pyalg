@@ -7,6 +7,8 @@
 
 #include "EvtNavigator/NavBuffer.h"
 
+DECLARE_ALGORITHM(Edm2NumpyAlg);
+
 Edm2NumpyAlg::Edm2NumpyAlg(const std::string& name)
     : AlgBase(name) {
 
