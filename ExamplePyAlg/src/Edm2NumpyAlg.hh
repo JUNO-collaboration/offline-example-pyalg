@@ -3,7 +3,9 @@
 
 #include <SniperKernel/AlgBase.h>
 
+#include <EvtNavigator/NavBuffer.h>
 #include <Event/SimHeader.h>
+
 #include <boost/python/numpy.hpp>
 
 class Edm2NumpyAlg: public AlgBase {
@@ -15,6 +17,7 @@ public:
     bool finalize();
 
 private:
+    JM::NavBuffer* m_buf;
 };
 
 #endif
