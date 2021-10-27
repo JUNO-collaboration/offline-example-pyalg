@@ -3,6 +3,10 @@
 
 from Sniper import PyAlgBase
 
+
+##############################################################################
+# Numpy is installed by default in JUNO offline software
+##############################################################################
 try:
     import numpy as np
 except:
@@ -20,6 +24,24 @@ try:
     import torch
 except:
     torch = None # if no torch found
+
+##############################################################################
+# Tensorflow could also be installed with dedicated install prefix by following command:
+#
+#   pip install --target /tmp/lint/juno-J21v2r0-branch-testing/tensorflow tensorflow
+#
+# Then you need to add this path to sys.path
+#  export PYTHONPATH=/tmp/lint/juno-J21v2r0-branch-testing/tensorflow:$PYTHONPATH
+#
+# Note: the tensorflow may install its own numpy, which could cause problem. 
+#
+##############################################################################
+try:
+    import tensorflow as tf
+except:
+    tf = None
+
+
 
 class DummyPyAlg(PyAlgBase):
 
@@ -59,6 +81,9 @@ class DummyPyAlg(PyAlgBase):
         # Test if pytorch is installed
         if torch:
             self.process_data_in_torch()
+        # Test if tensorflow is installed
+        if tf:
+            self.process_data_in_tensorflow()
 
         return True
 
@@ -98,4 +123,16 @@ class DummyPyAlg(PyAlgBase):
         # calculate the mean of hittime
         hittime = torch.from_numpy(self.hittime)
         meanhittime = torch.mean(hittime)
-        print("Mean hit time (numpy): ", meanhittime)
+        print("Mean hit time (torch): ", meanhittime)
+
+    def process_data_in_tensorflow(self):
+        # calculate the sum of nPE
+        npe = self.npe
+        totalpe = tf.math.reduce_sum(npe)
+        print("Total PE (tensorflow): ", totalpe)
+
+        # calculate the mean of hittime
+        hittime = self.hittime
+        meanhittime = tf.math.reduce_mean(hittime)
+        print("Mean hit time (tensorflow): ", meanhittime)
+
