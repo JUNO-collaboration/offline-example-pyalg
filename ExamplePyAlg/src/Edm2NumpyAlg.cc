@@ -5,6 +5,8 @@
 #include "SniperKernel/SniperLog.h"
 #include "SniperKernel/SniperPtr.h"
 
+#include "SniperPython/PyDataStore.h"
+
 #include "EvtNavigator/NavBuffer.h"
 
 namespace p = boost::python;
@@ -83,6 +85,25 @@ bool Edm2NumpyAlg::execute() {
 
         ++hit_counter;
     }
+
+    // register them 
+
+    SniperDataPtr<PyDataStore> pystore(*getRoot(), "DataStore");
+    if (pystore.invalid()) {
+        LogError << "Failed to find the PyDataStore. Register the value to module " << std::endl;
+
+        p::object this_module = p::import("ExamplePyAlg");
+        this_module.attr("pmtid") = arr_pmtid;
+        this_module.attr("npe") = arr_npe;
+        this_module.attr("hittime") = arr_hittime;
+    } else {
+        LogInfo << "Register the value to PyDataStore. " << std::endl;
+        pystore->set("pmtid", arr_pmtid);
+        pystore->set("npe", arr_npe);
+        pystore->set("hittime", arr_hittime);
+    }
+
+
 
     return true;
 }

@@ -22,9 +22,15 @@ class Edm2NumpyModule(JUNOModule):
         pass
 
     def init(self, toptask, args):
+        import SniperPython
+        toptask.createSvc("PyDataStoreSvc/DataStore")
+
         import ExamplePyAlg
+        import ExamplePyAlg.DummyPyAlg
 
         edm2numpy = toptask.createAlg("Edm2NumpyAlg")
+        self.dummypyalg = ExamplePyAlg.DummyPyAlg.DummyPyAlg("DummyPyAlg")
+        toptask.addAlg(self.dummypyalg)
 
 ##############################################################################
 # Application
