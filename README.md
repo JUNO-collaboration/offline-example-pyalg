@@ -21,9 +21,16 @@ If you need to install torch or tensorflow, please run following commands.
 
 ```bash
 $ mkdir pyinstalled
+
+# Method 1: install the fixed version using the requirements.txt, which is generated from 'pip freeze' 
+$ pip install -t pyinstalled -r requirements.txt 
+
+# Method 2: install the latest version
 $ pip install -t pyinstalled tensorflow torch # In this example, will tensorflow 2.6 (protobuf 3.9.2)
 $ pip install -t pyinstalled -U protobuf==3.9.2 six==1.15.0 # To work with tensorflow 2.6
 $ rm -rf pyinstalled/numpy* # remove local numpy
+
+# setup the PYTHONPATH
 $ export PYTHONPATH=$(pwd)/pyinstalled:$PYTHONPATH
 $ python ExamplePyAlg/share/run.py
 ```
