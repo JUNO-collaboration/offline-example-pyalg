@@ -45,7 +45,7 @@ recommonmark==0.7.1
 requests==2.26.0
 requests-oauthlib==1.3.0
 rsa==4.7.2
-six==1.16.0
+six==1.15.0
 snowballstemmer==2.1.0
 Sphinx==3.5.4
 sphinx-rtd-theme==0.5.2
