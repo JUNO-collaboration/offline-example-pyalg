@@ -23,7 +23,7 @@ If you need to install torch or tensorflow, please run following commands.
 $ mkdir pyinstalled
 
 # Method 1: install the fixed version using the requirements.txt, which is generated from 'pip freeze' 
-$ pip install -t pyinstalled -r requirements.txt 
+$ pip install -t pyinstalled -r requirements.txt --no-deps
 
 # Method 2: install the latest version
 $ pip install -t pyinstalled tensorflow torch # In this example, will tensorflow 2.6 (protobuf 3.9.2)
