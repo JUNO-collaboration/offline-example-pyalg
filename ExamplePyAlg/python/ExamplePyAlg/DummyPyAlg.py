@@ -53,18 +53,13 @@ class DummyPyAlg(PyAlgBase):
 
     def initialize(self):
         self.datastore = self.get("DataStore").data()
-
         return True
 
     def execute(self):
-        pmtid = None
-        npe = None
-        hittime = None
-
-        # Get pmtid/npe/hittime
-        self.pmtid = self.access_array("pmtid")
-        self.npe = self.access_array("npe")
-        self.hittime = self.access_array("hittime")
+        ## Get pmtid/npe/hittime
+        self.pmtid = self.datastore["pmtid"]
+        self.npe = self.datastore["npe"]
+        self.hittime = self.datastore["hittime"]
 
         if self.pmtid is None:
             print("array pmtid not found. ")
@@ -93,18 +88,6 @@ class DummyPyAlg(PyAlgBase):
     ##########################################################################
     # HELPERS
     ##########################################################################
-    def access_array(self, name):
-        import ExamplePyAlg
-        if hasattr(ExamplePyAlg, name):
-            print("Get %s from module ExamplePyAlg"%name)
-            return getattr(ExamplePyAlg, name)
-        elif "pmtid" in self.datastore:
-            print("Get %s from PyDataStore"%name)
-            return self.datastore[name]
-        else:
-            print("Can't get %s in the store."%name)
-            print(self.datastore)
-
     def process_data_in_numpy(self):
         # calculate the sum of nPE
         totalpe = np.sum(self.npe)
