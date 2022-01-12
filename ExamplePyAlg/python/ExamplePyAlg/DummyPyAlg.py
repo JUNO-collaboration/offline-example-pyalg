@@ -62,13 +62,13 @@ class DummyPyAlg(PyAlgBase):
         self.hittime = self.datastore["hittime"]
 
         if self.pmtid is None:
-            print("array pmtid not found. ")
+            self.LogError("array pmtid not found. ")
             return False
         if self.npe is None:
-            print("array npe not found. ")
+            self.LogError("array npe not found. ")
             return False
         if self.hittime is None:
-            print("array hittime not found. ")
+            self.LogError("array hittime not found. ")
             return False
 
         if np:
@@ -91,31 +91,31 @@ class DummyPyAlg(PyAlgBase):
     def process_data_in_numpy(self):
         # calculate the sum of nPE
         totalpe = np.sum(self.npe)
-        print("Total PE (numpy): ", totalpe)
+        self.LogInfo("Total PE (numpy): ", totalpe)
 
         # calculate the mean of hittime
         meanhittime = np.mean(self.hittime)
-        print("Mean hit time (numpy): ", meanhittime)
+        self.LogInfo("Mean hit time (numpy): ", meanhittime)
 
     def process_data_in_torch(self):
         # calculate the sum of nPE
         npe = torch.from_numpy(self.npe)
         totalpe = torch.sum(npe)
-        print("Total PE (torch): ", totalpe)
+        self.LogInfo("Total PE (torch): ", totalpe)
 
         # calculate the mean of hittime
         hittime = torch.from_numpy(self.hittime)
         meanhittime = torch.mean(hittime)
-        print("Mean hit time (torch): ", meanhittime)
+        self.LogInfo("Mean hit time (torch): ", meanhittime)
 
     def process_data_in_tensorflow(self):
         # calculate the sum of nPE
         npe = self.npe
         totalpe = tf.math.reduce_sum(npe)
-        print("Total PE (tensorflow): ", totalpe)
+        self.LogInfo("Total PE (tensorflow): ", totalpe)
 
         # calculate the mean of hittime
         hittime = self.hittime
         meanhittime = tf.math.reduce_mean(hittime)
-        print("Mean hit time (tensorflow): ", meanhittime)
+        self.LogInfo("Mean hit time (tensorflow): ", meanhittime)
 
