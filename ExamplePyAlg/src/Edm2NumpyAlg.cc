@@ -8,6 +8,7 @@
 #include "SniperPython/PyDataStore.h"
 
 #include "EvtNavigator/NavBuffer.h"
+#include "EvtNavigator/EvtNavHelper.h"
 
 namespace p = boost::python;
 namespace np = boost::python::numpy;
@@ -43,13 +44,13 @@ bool Edm2NumpyAlg::execute() {
         return false;
     }
 
-    auto simhdr = static_cast<JM::SimHeader*>(nav->getHeader("/Event/Sim"));
+    auto simhdr = JM::getHeaderObject<JM::SimHeader>(nav);
     if (not simhdr) {
         LogError << "Failed to find the SimHeader. " << std::endl;
         return false;
     }
 
-    auto simevt = static_cast<JM::SimEvent*>(simhdr->event());
+    auto simevt = static_cast<JM::SimEvt*>(simhdr->event());
     if (not simevt) {
         LogError << "Failed to find the SimEvent. " << std::endl;
         return false;
