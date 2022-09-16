@@ -2,6 +2,6 @@ find_package(Boost COMPONENTS numpy)
 
 PKG(ExamplePyAlg
     DEPENDS
-        offline::SimEvent
+        junosw::SimEvent
         Boost::numpy
 )
